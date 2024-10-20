@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="/admin.css"> 
+</head>
+<body>
+    <div class="container">
+        <h2>Admin Access</h2>
+
+        <form id="adminForm">
+            <label for="passcode">Enter Admin Passcode:</label>
+            <input type="password" id="passcode" name="passcode" required>
+
+            <div class="buttons">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+
+        <div class="register-button">
+            <button class="register-btn" onclick="window.location.href='login.html';" type="button">Back to Login</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('adminForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const passcode = document.getElementById('passcode').value;
+            const correctPasscode = '1234';
+
+            if (passcode === correctPasscode) {
+                alert('Access Granted');
+              
+                window.location.href = 'admin_dashboard.html'; 
+            } else {
+                alert('Incorrect Passcode. Access Denied.');
+            }
+        });
+    </script>
+</body>
+</html>

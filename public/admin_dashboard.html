@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/admin_dashboard.css">
+    <style>
+        .return-to-login {
+            position: absolute;
+            top: 20px;         
+            right: 20px;       
+            text-decoration: none;
+            font-size: 16px;   
+            color: #007BFF;    
+            font-weight: bold;  
+        }
+        
+        .return-to-login:hover {
+            text-decoration: underline; 
+        }
+    </style>
+</head>
+<body>
+    <a href="/login.html" class="return-to-login">← Return to Login</a> 
+
+    <div class="dashboard-container">
+        <h1>Admin Dashboard</h1>
+        <div class="add-user-form">
+            <h2>Add New User</h2>
+            <form id="addUserForm">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                
+                <label for="department">Department:</label>
+                <select id="department" name="department" required>
+                    <option value="" disabled selected>Select your department</option>
+                    <option value="computer_science">Computer Science</option>
+                    <option value="biology">Biology</option>
+                    <option value="chemistry">Chemistry</option>
+                    <option value="physics">Physics</option>
+                    <option value="medical physics">Medical Physics</option>
+                    <option value="forensic evidence">Forensic Evidence</option>
+                    <option value="mathematics and computer applications">Mathematics and Computer Applications</option>
+                    <option value="pathological analysis or medical laboratory analysis">Pathological Analysis or Medical Laboratory Analysis</option>
+                </select>
+                
+                <label for="stage">Stage:</label>
+                <select id="stage" name="stage" required>
+                    <option value="" disabled selected>Select your stage</option>
+                    <option value="first">First Stage</option>
+                    <option value="second">Second Stage</option>
+                    <option value="third">Third Stage</option>
+                    <option value="fourth">Fourth Stage</option>
+                </select>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+
+                <button type="submit">Add User</button>
+            </form>
+        </div>
+
+        <h2>All Users</h2>
+        <table id="userTable">
+            <thead>
+                <tr>
+                    <th>User No</th>
+                    <th>Email</th>
+                    <th>Department</th>
+                    <th>Stage</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        async function fetchUsers() {
+            try {
+                const response = await fetch('/users');
+                if (!response.ok) {
+                    throw new Error('Error fetching users');
+                }
+                const users = await response.json();
+                const userTableBody = document.getElementById('userTableBody');
+                userTableBody.innerHTML = '';
+
+                users.forEach((user, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${user.email}</td>
+                        <td>${user.department}</td>
+                        <td>${user.stage}</td>
+                        <td>
+                            <button onclick="deleteUser('${user._id}')">Delete</button>
+                        </td>
+                    `;
+                    userTableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        }
+        async function deleteUser(userId) {
+            try {
+                const response = await fetch(`/users/${userId}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    alert('User deleted successfully');
+                    fetchUsers();
+                } else {
+                    alert('Error deleting user');
+                }
+            } catch (error) {
+                console.error('Error deleting user:', error);
+            }
+        }
+
+        document.getElementById('addUserForm').addEventListener('submit', async (event) => {
+            event.preventDefault(); 
+
+            const email = document.getElementById('email').value;
+            const department = document.getElementById('department').value;
+            const stage = document.getElementById('stage').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/admin/users/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, department, stage, password }),
+                });
+
+                if (response.ok) {
+                    alert('User added successfully');
+                    fetchUsers();
+                    event.target.reset();
+                } else {
+                    alert('Error adding user');
+                }
+            } catch (error) {
+                console.error('Error adding user:', error);
+            }
+        });
+        fetchUsers();
+    </script>
+</body>
+</html>

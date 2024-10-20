@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Exams</title>
+</head>
+<body>
+    <h1>Available Exam</h1>
+    <!-- <div id="examContainer"></div>
+
+    <script>
+const urlParams = new URLSearchParams(window.location.search);
+const examId = urlParams.get('id'); 
+
+async function fetchExam() {
+    if (!examId) {
+        console.error('No exam ID provided in the URL');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/exams/${examId}`);
+        if (!response.ok) throw new Error('Error fetching exam');
+        const exam = await response.json();
+        displayExam(exam);
+    } catch (error) {
+        console.error('Error fetching exam:', error);
+    }
+}
+
+function displayExam(exam) {
+    const examContainer = document.getElementById('examContainer');
+    const examDiv = document.createElement('div');
+    examDiv.innerHTML = `
+        <h2>${exam.title}</h2>
+        <button onclick="startExam('${exam._id}')">Take Exam</button>
+    `;
+    examContainer.appendChild(examDiv);
+}
+
+function startExam(examId) {
+   
+    window.location.href = `/exam.html?id=${examId}`;
+}
+
+fetchExam();
+    </script> -->
+</body>
+</html>
